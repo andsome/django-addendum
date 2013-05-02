@@ -1,4 +1,15 @@
 ===============
+Fork Details
+===============
+Added a quick way to enable markdown for snippet content.
+
+Useage is:
+::
+    {% snippet 'snippet_name' markdown=True %}About{% endsnippet %}
+
+Using markdown will ignore other builtin options (safe, richtext, template).
+
+===============
 Django Addendum
 ===============
 
