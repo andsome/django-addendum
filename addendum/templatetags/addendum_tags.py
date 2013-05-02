@@ -1,3 +1,5 @@
+import markdown2
+
 from django import template
 from django.template.base import TemplateSyntaxError
 from django.utils.html import conditional_escape
@@ -39,7 +41,7 @@ def snippet(parser, token):
         except ValueError:
             raise TemplateSyntaxError("%s has bad or badly formed option arguments." % tag_name)
 
-        if option not in ['safe', 'richtext', 'template']:
+        if option not in ['safe', 'richtext', 'template', 'markdown']:
             raise TemplateSyntaxError("%s recieved an invalid option." % tag_name)
 
         if option == 'richtext':
@@ -59,6 +61,7 @@ class SnippetNode(template.Node):
 
     safe = False
     template = False
+    markdown = False
 
     def __init__(self, nodelist, key, **options):
         self.nodelist = nodelist
@@ -75,6 +78,9 @@ class SnippetNode(template.Node):
         if snippet is None:
             output = self.nodelist.render(context)
             return output
+
+        if self.markdown:
+            return markdown2.markdown(snippet.text)
 
         if self.template:
             if self.safe:
